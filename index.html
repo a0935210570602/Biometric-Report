@@ -26,9 +26,21 @@
     <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-3xl overflow-hidden">
         
         <!-- Header -->
-        <div class="bg-indigo-800 p-10 text-white">
-            <h1 class="text-3xl font-bold mb-2 text-center">12/30 生物統計學報告：113000105 潘建蒼</h1>
-            <p class="text-indigo-200 text-center opacity-90">20250825 國考考題題庫</p>
+        <div class="bg-indigo-800 p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl font-bold mb-2">12/30 生物統計學報告：113000105 潘建蒼</h1>
+                <p class="text-indigo-200 opacity-90">20250825 國考考題題庫</p>
+            </div>
+            <!-- QR Code 展示區 -->
+            <div class="flex flex-col items-center gap-2">
+                <div class="bg-white p-2 rounded-xl shadow-lg">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://bioreport.panbm.org/" 
+                         alt="QR Code" 
+                         class="w-24 h-24"
+                         onerror="this.src='https://placehold.co/100x100?text=QR+Code'">
+                </div>
+                <span class="text-xs text-indigo-300 font-medium">掃描查看線上版</span>
+            </div>
         </div>
 
         <!-- 原題目展示 -->
@@ -62,7 +74,7 @@
                             <b>2x2 列聯表</b>是用來觀察「兩個變項」是否有關聯的工具。例如：性別（男/女）與是否感冒（是/否）。
                         </p>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-center border">
+                            <table class="w-full text-sm text-center border border-slate-200">
                                 <tr class="bg-slate-100">
                                     <th class="p-2 border"></th><th class="p-2 border">感冒</th><th class="p-2 border">健康</th><th class="p-2 border">總計</th>
                                 </tr>
@@ -73,7 +85,7 @@
                                     <th class="p-2 border bg-slate-50">女性</th><td class="p-2 border">c</td><td class="p-2 border">d</td><td class="p-2 border bg-blue-50">R2</td>
                                 </tr>
                                 <tr>
-                                    <th class="p-2 border bg-slate-100">總計</th><td class="p-2 border bg-blue-50">C1</td><td class="p-2 border bg-blue-50">C2</td><td class="p-2 border bg-yellow-50 font-bold">N</td>
+                                    <th class="p-2 border bg-slate-100 text-slate-600">總計</th><td class="p-2 border bg-blue-50">C1</td><td class="p-2 border bg-blue-50">C2</td><td class="p-2 border bg-yellow-50 font-bold text-slate-800">N</td>
                                 </tr>
                             </table>
                         </div>
@@ -149,29 +161,29 @@
                     四種方法統整對照表
                 </h3>
                 <div class="overflow-x-auto shadow-sm rounded-xl border border-slate-200">
-                    <table class="w-full text-sm text-left">
+                    <table class="w-full text-sm text-left border-collapse">
                         <thead class="bg-slate-800 text-white">
                             <tr>
-                                <th class="p-4 border">統計方法</th>
-                                <th class="p-4 border">適用條件 (期望值 E)</th>
+                                <th class="p-4 border border-slate-700">統計方法</th>
+                                <th class="p-4 border border-slate-700">適用條件 (期望值 E)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white hover:bg-slate-50">
-                                <td class="p-4 border font-bold">卡方檢定</td>
-                                <td class="p-4 border text-green-600 font-medium">所有格子滿足： \(E \ge 5\)</td>
+                            <tr class="bg-white hover:bg-slate-50 transition-colors">
+                                <td class="p-4 border border-slate-200 font-bold">卡方檢定</td>
+                                <td class="p-4 border border-slate-200 text-green-600 font-medium">所有格子滿足： \(E \ge 5\)</td>
                             </tr>
-                            <tr class="bg-green-50 hover:bg-green-100">
-                                <td class="p-4 border font-bold text-green-800">費雪恰當檢定</td>
-                                <td class="p-4 border text-red-600 font-bold">所有格子滿足： \(E < 5\) (本題考點)</td>
+                            <tr class="bg-green-50 hover:bg-green-100 transition-colors">
+                                <td class="p-4 border border-green-200 font-bold text-green-800">費雪恰當檢定</td>
+                                <td class="p-4 border border-green-200 text-red-600 font-bold">所有格子滿足： \(E < 5\) (本題考點)</td>
                             </tr>
-                            <tr class="bg-white hover:bg-slate-50">
-                                <td class="p-4 border font-bold">Yates 校正</td>
-                                <td class="p-4 border">所有格子滿足： \(5 \le E \)</td>
+                            <tr class="bg-white hover:bg-slate-50 transition-colors">
+                                <td class="p-4 border border-slate-200 font-bold">Yates 校正</td>
+                                <td class="p-4 border border-slate-200">所有格子滿足： \(5 \le E \)</td>
                             </tr>
-                            <tr class="bg-blue-50 hover:bg-blue-100">
-                                <td class="p-4 border font-bold text-blue-800">McNemar 檢定</td>
-                                <td class="p-4 border text-blue-800">成對或前後對照資料(無關 E 值大小!)</td>
+                            <tr class="bg-blue-50 hover:bg-blue-100 transition-colors">
+                                <td class="p-4 border border-blue-200 font-bold text-blue-800">McNemar 檢定</td>
+                                <td class="p-4 border border-blue-200 text-blue-800 font-medium italic">成對或前後對照資料(無關 E 值大小!)</td>
                             </tr>
                         </tbody>
                     </table>
