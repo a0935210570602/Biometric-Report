@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計學進階詳解：2x2 列聯表分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+        }
+        .method-card {
+            border-left-width: 4px;
+            transition: all 0.3s ease;
+        }
+        .method-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 bg-slate-50">
+    <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-3xl overflow-hidden">
+        
+        <!-- Header -->
+        <div class="bg-indigo-800 p-10 text-white">
+            <h1 class="text-3xl font-bold mb-2 text-center">12/30 生物統計學報告：113000105 潘建蒼</h1>
+            <p class="text-indigo-200 text-center opacity-90">20250825 國考考題題庫</p>
+        </div>
+
+        <!-- 原題目展示 -->
+        <div class="p-8 bg-indigo-50 border-b border-indigo-100">
+            <div class="flex items-center mb-4">
+                <span class="bg-indigo-600 text-white px-3 py-1 rounded text-sm font-bold mr-3">原題回顧</span>
+                <h2 class="text-xl font-bold text-slate-800">第 36 題</h2>
+            </div>
+            <p class="text-lg text-slate-700 leading-relaxed mb-6">
+                處理 2x2 列聯表數據之統計分析，若其中一個細格的<b>期望值小於 5</b>，此時應使用下列何種方法執行統計學檢定較為恰當？
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-3 border rounded bg-white">(A) 卡方檢定 (Chi-square test)</div>
+                <div class="p-3 border-2 border-green-500 rounded bg-green-50 font-bold text-green-700">(B) 費雪恰當檢定 (Fisher’s exact test)</div>
+                <div class="p-3 border rounded bg-white">(C) Yates 校正之卡方檢定法 (Yates correction)</div>
+                <div class="p-3 border rounded bg-white">(D) McNemar 檢定法 (McNemar test)</div>
+            </div>
+        </div>
+
+        <div class="p-8 space-y-12">
+            
+            <!-- 1. 2x2 列聯表 和 期望值公式 -->
+            <section>
+                <h3 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-200 pb-2 mb-6 flex items-center">
+                    <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">1</span>
+                    2x2 列聯表與期望值公式
+                </h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-slate-600 mb-4 leading-relaxed">
+                            <b>2x2 列聯表</b>是用來觀察「兩個變項」是否有關聯的工具。例如：性別（男/女）與是否感冒（是/否）。
+                        </p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-center border">
+                                <tr class="bg-slate-100">
+                                    <th class="p-2 border"></th><th class="p-2 border">感冒</th><th class="p-2 border">健康</th><th class="p-2 border">總計</th>
+                                </tr>
+                                <tr>
+                                    <th class="p-2 border bg-slate-50">男性</th><td class="p-2 border">a</td><td class="p-2 border">b</td><td class="p-2 border bg-blue-50">R1</td>
+                                </tr>
+                                <tr>
+                                    <th class="p-2 border bg-slate-50">女性</th><td class="p-2 border">c</td><td class="p-2 border">d</td><td class="p-2 border bg-blue-50">R2</td>
+                                </tr>
+                                <tr>
+                                    <th class="p-2 border bg-slate-100">總計</th><td class="p-2 border bg-blue-50">C1</td><td class="p-2 border bg-blue-50">C2</td><td class="p-2 border bg-yellow-50 font-bold">N</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl flex flex-col justify-center">
+                        <p class="font-bold text-indigo-800 mb-2 underline">期望值 (Expected Value) 公式：</p>
+                        <div class="text-2xl text-center py-4 bg-white rounded-lg shadow-inner">
+                            $$E = \frac{\text{列總和} \times \text{行總和}}{\text{總樣本數}}$$
+                        </div>
+                        <p class="text-xs text-slate-400 mt-4 text-center italic">※ 只要表格中任何一個 E < 5，就是本題的警訊！</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 為何卡方檢定不適用 -->
+            <section class="method-card border-red-400 bg-red-50 p-6 rounded-r-xl">
+                <h3 class="text-xl font-bold text-red-800 mb-3 flex items-center">
+                    <span class="bg-red-200 text-red-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">2</span>
+                    為什麼卡方檢定 (Chi-square) 此時不適用？
+                </h3>
+                <p class="text-slate-700 leading-relaxed">
+                    卡方檢定是一種<b>「近似（Approximation）」</b>方法，它假設數據的分佈像一條平滑的曲線。
+                    但是當<b>任意一格的期望值 < 5</b> 時，代表數據太過「稀疏」，這條平滑曲線會產生嚴重的誤差，導致算出來的 P 值（機率）不可靠。
+                </p>
+            </section>
+
+            <!-- 3. 費雪恰當檢定 -->
+            <section class="method-card border-green-500 bg-green-50 p-6 rounded-r-xl">
+                <h3 class="text-xl font-bold text-green-800 mb-3 flex items-center">
+                    <span class="bg-green-200 text-green-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">3</span>
+                    費雪恰當檢定 (Fisher’s exact test) 的適用時機
+                </h3>
+                <p class="text-slate-700 font-bold mb-2">💡 本題的最佳答案！</p>
+                <ul class="list-disc ml-6 space-y-2 text-slate-600">
+                    <li><b>適用條件</b>：樣本數極小，或任意一格的<b>期望值 < 5</b>。</li>
+                    <li><b>原理</b>：它不靠曲線猜測，而是直接透過「排列組合」算出發生這種情況的「精確機率」。</li>
+                    <li><b>優點</b>：在小樣本時最精準。</li>
+                </ul>
+            </section>
+
+            <!-- 4. Yates 校正 -->
+            <section class="method-card border-orange-400 bg-orange-50 p-6 rounded-r-xl">
+                <h3 class="text-xl font-bold text-orange-800 mb-3 flex items-center">
+                    <span class="bg-orange-200 text-orange-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">4</span>
+                    Yates 校正之卡方檢定法適用時機
+                </h3>
+                <p class="text-slate-700 leading-relaxed mb-3">
+                    這是一種「補救型」卡方檢定。
+                </p>
+                <ul class="list-disc ml-6 space-y-2 text-slate-600">
+                    <li><b>適用條件</b>：通常用於 2x2 表，且期望值在 <b>5 到 10 之間</b>。</li>
+                    <li><b>原理</b>：在卡方公式中減去 0.5，讓結果保守一點。</li>
+                </ul>
+            </section>
+
+            <!-- 5. McNemar 檢定 -->
+            <section class="method-card border-blue-400 bg-blue-50 p-6 rounded-r-xl">
+                <h3 class="text-xl font-bold text-blue-800 mb-3 flex items-center">
+                    <span class="bg-blue-200 text-blue-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">5</span>
+                    McNemar 檢定法適用時機
+                </h3>
+                <p class="text-slate-700 font-bold mb-2">適用條件：用於 2×2 的成對 (Paired) 或前後對照資料，檢定「改變是否顯著」</p>
+                <ul class="list-disc ml-6 space-y-2 text-slate-600">
+                    <li><b>案例</b>：同一組病人在「吃藥前」與「吃藥後」的變化。</li>
+                    <li><b>特徵</b>：表格的兩個變項是相關連的（同一個人重複測量兩次）。</li>
+                </ul>
+            </section>
+
+            <!-- 6. 統整表格 -->
+            <section>
+                <h3 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-200 pb-2 mb-6 flex items-center">
+                    <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">6</span>
+                    四種方法統整對照表
+                </h3>
+                <div class="overflow-x-auto shadow-sm rounded-xl border border-slate-200">
+                    <table class="w-full text-sm text-left">
+                        <thead class="bg-slate-800 text-white">
+                            <tr>
+                                <th class="p-4 border">統計方法</th>
+                                <th class="p-4 border">適用條件 (期望值 E)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white hover:bg-slate-50">
+                                <td class="p-4 border font-bold">卡方檢定</td>
+                                <td class="p-4 border text-green-600 font-medium">所有格子滿足： \(E \ge 5\)</td>
+                            </tr>
+                            <tr class="bg-green-50 hover:bg-green-100">
+                                <td class="p-4 border font-bold text-green-800">費雪恰當檢定</td>
+                                <td class="p-4 border text-red-600 font-bold">所有格子滿足： \(E < 5\) (本題考點)</td>
+                            </tr>
+                            <tr class="bg-white hover:bg-slate-50">
+                                <td class="p-4 border font-bold">Yates 校正</td>
+                                <td class="p-4 border">所有格子滿足： \(5 \le E \)</td>
+                            </tr>
+                            <tr class="bg-blue-50 hover:bg-blue-100">
+                                <td class="p-4 border font-bold text-blue-800">McNemar 檢定</td>
+                                <td class="p-4 border text-blue-800">成對或前後對照資料(無關 E 值大小!)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Final Reminder -->
+        <div class="bg-slate-100 p-8 text-center border-t border-slate-200">
+            <p class="text-slate-500 text-sm">
+                <b>學習重點小筆記：</b>看到 2x2 列聯表且樣本少（E < 5），大腦請立刻反應「費雪 (Fisher)」！
+            </p>
+        </div>
+    </div>
+</body>
+</html>
