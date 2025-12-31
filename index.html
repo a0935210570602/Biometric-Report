@@ -3,201 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>統計學進階詳解：2x2 列聯表分析</title>
+    <title>血液腫瘤學考古題整合筆記</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #f8fafc;
-        }
-        .method-card {
-            border-left-width: 4px;
-            transition: all 0.3s ease;
-        }
-        .method-card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
+        .concept-box { border-left: 4px solid #3b82f6; padding-left: 1rem; margin-bottom: 1.5rem; }
+        .exam-link { background-color: #fef3c7; border: 1px solid #f59e0b; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-size: 0.875rem; font-weight: 600; }
+        .highlight { color: #dc2626; font-weight: bold; }
+        .table-header { background-color: #f3f4f6; font-weight: bold; text-align: center; }
+        .data-cell { padding: 0.5rem; border: 1px solid #e5e7eb; }
     </style>
 </head>
-<body class="p-4 md:p-8 bg-slate-50">
-    <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-3xl overflow-hidden">
-        
-        <!-- Header -->
-        <div class="bg-indigo-800 p-10 text-white flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="text-center md:text-left">
-                <h1 class="text-3xl font-bold mb-2">12/30 生物統計學報告：113000105 潘建蒼</h1>
-                <p class="text-indigo-200 opacity-90">20250825 國考考題題庫</p>
-            </div>
-            <!-- QR Code 展示區 -->
-            <div class="flex flex-col items-center gap-2">
-                <div class="bg-white p-2 rounded-xl shadow-lg">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://bioreport.panbm.org/" 
-                         alt="QR Code" 
-                         class="w-24 h-24"
-                         onerror="this.src='https://placehold.co/100x100?text=QR+Code'">
-                </div>
-                <span class="text-xs text-indigo-300 font-medium">掃描查看報告</span>
-            </div>
-        </div>
+<body class="bg-gray-50 text-gray-800 p-6 lg:p-12">
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-xl overflow-hidden p-8">
+        <header class="border-b border-gray-200 mb-8 pb-4">
+            <h1 class="text-3xl font-bold text-blue-900">血液腫瘤學：考古題與講義重點整合</h1>
+            <p class="text-gray-500 mt-2">適用對象：醫學系學生 | 範圍：AML, ALL, MDS</p>
+        </header>
 
-        <!-- 原題目展示 -->
-        <div class="p-8 bg-indigo-50 border-b border-indigo-100">
-            <div class="flex items-center mb-4">
-                <span class="bg-indigo-600 text-white px-3 py-1 rounded text-sm font-bold mr-3">原題回顧</span>
-                <h2 class="text-xl font-bold text-slate-800">第 36 題</h2>
-            </div>
-            <p class="text-lg text-slate-700 leading-relaxed mb-6">
-                處理 2x2 列聯表數據之統計分析，若其中一個細格的<b>期望值小於 5</b>，此時應使用下列何種方法執行統計學檢定較為恰當？
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="p-3 border rounded bg-white">(A) 卡方檢定 (Chi-square test)</div>
-                <div class="p-3 border-2 border-green-500 rounded bg-green-50 font-bold text-green-700">(B) 費雪恰當檢定 (Fisher’s exact test)</div>
-                <div class="p-3 border rounded bg-white">(C) Yates 校正之卡方檢定法 (Yates correction)</div>
-                <div class="p-3 border rounded bg-white">(D) McNemar 檢定法 (McNemar test)</div>
-            </div>
-        </div>
-
-        <div class="p-8 space-y-12">
+        <!-- Section 1: AML -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4 border-b-2 border-blue-200">一、急性骨髓性白血病 (Acute Myeloid Leukemia, AML)</h2>
             
-            <!-- 1. 2x2 列聯表 和 期望值公式 -->
-            <section>
-                <h3 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-200 pb-2 mb-6 flex items-center">
-                    <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">1</span>
-                    2x2 列聯表與期望值公式
-                </h3>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div>
-                        <p class="text-slate-600 mb-4 leading-relaxed">
-                            <b>2x2 列聯表</b>是用來觀察「兩個變項」是否有關聯的工具。例如：性別（男/女）與是否感冒（是/否）。
-                        </p>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-center border border-slate-200">
-                                <tr class="bg-slate-100">
-                                    <th class="p-2 border"></th><th class="p-2 border">感冒</th><th class="p-2 border">健康</th><th class="p-2 border">總計</th>
-                                </tr>
-                                <tr>
-                                    <th class="p-2 border bg-slate-50">男性</th><td class="p-2 border">a</td><td class="p-2 border">b</td><td class="p-2 border bg-blue-50">R1</td>
-                                </tr>
-                                <tr>
-                                    <th class="p-2 border bg-slate-50">女性</th><td class="p-2 border">c</td><td class="p-2 border">d</td><td class="p-2 border bg-blue-50">R2</td>
-                                </tr>
-                                <tr>
-                                    <th class="p-2 border bg-slate-100 text-slate-600">總計</th><td class="p-2 border bg-blue-50">C1</td><td class="p-2 border bg-blue-50">C2</td><td class="p-2 border bg-yellow-50 font-bold text-slate-800">N</td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="bg-slate-50 p-6 rounded-2xl flex flex-col justify-center">
-                        <p class="font-bold text-indigo-800 mb-2 underline">期望值 (Expected Value) 公式：</p>
-                        <div class="text-2xl text-center py-4 bg-white rounded-lg shadow-inner">
-                            $$E = \frac{\text{列總和} \times \text{行總和}}{\text{總樣本數}}$$
-                        </div>
-                        <p class="text-xs text-slate-400 mt-4 text-center italic">※ 只要表格中任何一個 E < 5，就是本題的警訊！</p>
-                    </div>
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">1. 診斷與 WHO 分類基準 (WHO Classification)</h3>
+                <p>世界衛生組織 (WHO) 的分類不再僅看細胞型態 (FAB Classification)，而是整合了：<span class="highlight">細胞遺傳學 (Cytogenetics)</span>、<span class="highlight">分子遺傳學 (Molecular Genetics)</span>、<span class="highlight">形態學 (Morphology)</span> 及 <span class="highlight">臨床特徵 (Clinical features)</span>。</p>
+                <div class="mt-2">
+                    <span class="exam-link">對應考古題 Q1</span>：WHO 分類 <u>不使用</u> 「診斷時的年齡 (Age) 與白血球數 (WBC count)」作為分類基礎（注意：雖然它們是重要的預後因子 (Prognostic factors)，但並非分類標準）。
                 </div>
-            </section>
-
-            <!-- 2. 為何卡方檢定不適用 -->
-            <section class="method-card border-red-400 bg-red-50 p-6 rounded-r-xl">
-                <h3 class="text-xl font-bold text-red-800 mb-3 flex items-center">
-                    <span class="bg-red-200 text-red-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">2</span>
-                    為什麼卡方檢定 (Chi-square) 此時不適用？
-                </h3>
-                <p class="text-slate-700 leading-relaxed">
-                    卡方檢定是一種<b>「近似（Approximation）」</b>方法，它假設數據的分佈像一條平滑的曲線。
-                    但是當<b>任意一格的期望值 < 5</b> 時，代表數據太過「稀疏」，這條平滑曲線會產生嚴重的誤差，導致算出來的 P 值（機率）不可靠。
-                </p>
-            </section>
-
-            <!-- 3. 費雪恰當檢定 -->
-            <section class="method-card border-green-500 bg-green-50 p-6 rounded-r-xl">
-                <h3 class="text-xl font-bold text-green-800 mb-3 flex items-center">
-                    <span class="bg-green-200 text-green-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">3</span>
-                    費雪恰當檢定 (Fisher’s exact test) 的適用時機
-                </h3>
-                <p class="text-slate-700 font-bold mb-2">💡 本題的最佳答案！</p>
-                <ul class="list-disc ml-6 space-y-2 text-slate-600">
-                    <li><b>適用條件</b>：樣本數極小，或任意一格的<b>期望值 < 5</b>。</li>
-                    <li><b>原理</b>：它不靠曲線猜測，而是直接透過「排列組合」算出發生這種情況的「精確機率」。</li>
-                    <li><b>優點</b>：在小樣本時最精準。</li>
-                </ul>
-            </section>
-
-            <!-- 4. Yates 校正 -->
-            <section class="method-card border-orange-400 bg-orange-50 p-6 rounded-r-xl">
-                <h3 class="text-xl font-bold text-orange-800 mb-3 flex items-center">
-                    <span class="bg-orange-200 text-orange-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">4</span>
-                    Yates 校正之卡方檢定法適用時機
-                </h3>
-                <p class="text-slate-700 leading-relaxed mb-3">
-                    這是一種「補救型」卡方檢定。
-                </p>
-                <ul class="list-disc ml-6 space-y-2 text-slate-600">
-                    <li><b>適用條件</b>：通常用於 2x2 表，且期望值在 <b>5 到 10 之間</b>。</li>
-                    <li><b>原理</b>：在卡方公式中減去 0.5，讓結果保守一點。</li>
-                </ul>
-            </section>
-
-            <!-- 5. McNemar 檢定 -->
-            <section class="method-card border-blue-400 bg-blue-50 p-6 rounded-r-xl">
-                <h3 class="text-xl font-bold text-blue-800 mb-3 flex items-center">
-                    <span class="bg-blue-200 text-blue-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">5</span>
-                    McNemar 檢定法適用時機
-                </h3>
-                <p class="text-slate-700 font-bold mb-2">適用條件：用於 2×2 的成對 (Paired) 或前後對照資料，檢定「改變是否顯著」</p>
-                <ul class="list-disc ml-6 space-y-2 text-slate-600">
-                    <li><b>案例</b>：同一組病人在「吃藥前」與「吃藥後」的變化。</li>
-                    <li><b>特徵</b>：表格的兩個變項是相關連的（同一個人重複測量兩次）。</li>
-                </ul>
-            </section>
-
-            <!-- 6. 統整表格 -->
-            <section>
-                <h3 class="text-2xl font-bold text-slate-800 border-b-2 border-indigo-200 pb-2 mb-6 flex items-center">
-                    <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">6</span>
-                    四種方法統整對照表
-                </h3>
-                <div class="overflow-x-auto shadow-sm rounded-xl border border-slate-200">
-                    <table class="w-full text-sm text-left border-collapse">
-                        <thead class="bg-slate-800 text-white">
-                            <tr>
-                                <th class="p-4 border border-slate-700">統計方法</th>
-                                <th class="p-4 border border-slate-700">適用條件 (期望值 E)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-white hover:bg-slate-50 transition-colors">
-                                <td class="p-4 border border-slate-200 font-bold">卡方檢定</td>
-                                <td class="p-4 border border-slate-200 text-green-600 font-medium">所有格子滿足： \(E \ge 5\)</td>
-                            </tr>
-                            <tr class="bg-green-50 hover:bg-green-100 transition-colors">
-                                <td class="p-4 border border-green-200 font-bold text-green-800">費雪恰當檢定</td>
-                                <td class="p-4 border border-green-200 text-red-600 font-bold">所有格子滿足： \(E < 5\) (本題考點)</td>
-                            </tr>
-                            <tr class="bg-white hover:bg-slate-50 transition-colors">
-                                <td class="p-4 border border-slate-200 font-bold">Yates 校正</td>
-                                <td class="p-4 border border-slate-200">所有格子滿足： \(5 \le E \)</td>
-                            </tr>
-                            <tr class="bg-blue-50 hover:bg-blue-100 transition-colors">
-                                <td class="p-4 border border-blue-200 font-bold text-blue-800">McNemar 檢定</td>
-                                <td class="p-4 border border-blue-200 text-blue-800 font-medium italic">成對或前後對照資料(無關 E 值大小!)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="mt-2">
+                    <span class="exam-link text-red-600 font-bold">Q4：診斷門檻</span>：通常需要骨髓 (Bone Marrow) 或血液中的 芽球 (Blast) 佔有核細胞 <span class="highlight">大於等於 20%</span>。但若具有特定 復發性遺傳異常 (Recurrent genetic abnormalities)，如 t(8;21)、inv(16)、t(15;17)，即使小於 20% 亦可診斷為 AML。
                 </div>
-            </section>
+            </div>
 
-        </div>
+            <div class="concept-box bg-blue-50 p-4">
+                <h3 class="font-bold text-lg mb-2">2. 特定基因轉位與型態/預後對照表</h3>
+                <p class="text-sm mb-3 text-gray-600 italic">（整理染色體轉位 Translocation、融合基因 Fusion gene 與臨床預後之關聯）</p>
+                <table class="min-w-full bg-white border border-gray-200 mb-4">
+                    <thead>
+                        <tr class="table-header">
+                            <td class="data-cell">染色體轉位</td>
+                            <td class="data-cell">分子融合基因</td>
+                            <td class="data-cell">臨床/形態特徵</td>
+                            <td class="data-cell">ELN 預後分層</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="data-cell">t(15;17)</td>
+                            <td class="data-cell">PML-RARA</td>
+                            <td class="data-cell">APL、易發生 DIC、厚顆粒 (Thick granules)</td>
+                            <td class="data-cell text-green-600 font-bold">良好 (Favorable)</td>
+                        </tr>
+                        <tr>
+                            <td class="data-cell">t(8;21)</td>
+                            <td class="data-cell">RUNX1-RUNX1T1</td>
+                            <td class="data-cell">細長 Auer rods、髓樣肉瘤 (Myeloid Sarcoma)</td>
+                            <td class="data-cell text-green-600 font-bold">良好 (Favorable)</td>
+                        </tr>
+                        <tr>
+                            <td class="data-cell">inv(16) / t(16;16)</td>
+                            <td class="data-cell">CBFB-MYH11</td>
+                            <td class="data-cell">異常骨髓嗜酸性球 (Abnormal Eosinophils)</td>
+                            <td class="data-cell text-green-600 font-bold">良好 (Favorable)</td>
+                        </tr>
+                        <tr>
+                            <td class="data-cell">t(9;11)</td>
+                            <td class="data-cell">KMT2A (MLL)</td>
+                            <td class="data-cell">單核球特性 (Monocytic)、齒齦增生 (Gingival hypertrophy)</td>
+                            <td class="data-cell text-yellow-600 font-bold">中等 (Intermediate)</td>
+                        </tr>
+                        <tr>
+                            <td class="data-cell">t(v;11q23.3)</td>
+                            <td class="data-cell">KMT2A rearranged</td>
+                            <td class="data-cell">髓外侵犯 (Extramedullary involvement) 強</td>
+                            <td class="data-cell text-red-600 font-bold">不良 (Adverse)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="text-sm"><span class="exam-link">Q2, Q3</span>：注意 t(15;17) 是 <b>唯一</b> 總是與特定形態 (APL) 連結的。髓樣肉瘤 (Myeloid sarcomas) 則與 t(8;21) 相關。</p>
+            </div>
 
-        <!-- Final Reminder -->
-        <div class="bg-slate-100 p-8 text-center border-t border-slate-200">
-            <p class="text-slate-500 text-sm">
-                <b>學習重點小筆記：</b>看到 2x2 列聯表且樣本少（E < 5），大腦請立刻反應「費雪 (Fisher)」！
-            </p>
-        </div>
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">3. APL (急性前骨髓性白血病, Acute Promyelocytic Leukemia) 專題</h3>
+                <p>APL (FAB 分類為 M3 型) 具有高度危險性但治癒率 (Curability) 也最高。</p>
+                <ul class="list-disc ml-6">
+                    <li><span class="highlight">併發症</span>：早期易發生 瀰漫性血管內凝血 (Disseminated Intravascular Coagulation, DIC)。 <span class="exam-link">Q3, Q7, Q8</span></li>
+                    <li><span class="highlight">治療 (Treatment)</span>：主體為 全反式維甲酸 (Tretinoin/ATRA) + 三氧化二砷 (Arsenic trioxide/ATO)。ATRA 可誘導分化 (Differentiation)，但也可能引起 APL 症候群 (Differentiation syndrome)。</li>
+                    <li><span class="highlight">預後</span>：完全緩解率 (Remission rate) 可高於 90%，長期生存率 (Long-term survival) 約 85% 左右。 <span class="exam-link">Q7, Q8 錯誤選項解析</span></li>
+                </ul>
+            </div>
+
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">4. 預後分層與遺傳傾向</h3>
+                <p>根據 歐洲白血病網 (European LeukemiaNet, ELN) 分層：</p>
+                <ul class="list-disc ml-6">
+                    <li><span class="highlight">良好 (Favorable)</span>：t(8;21), inv(16), NPM1 突變且無 FLT3-ITD。</li>
+                    <li><span class="highlight">不良 (Adverse)</span>：<span class="highlight">TP53 基因突變</span>、複雜染色體型 (Complex karyotype)、11q23 重組。 <span class="exam-link">Q17, Q18</span></li>
+                </ul>
+                <p class="mt-2 text-sm text-gray-600 italic">註：Q18 案例提到 TP53 突變，屬於 Adverse risk，即使達到 完全緩解 (Complete Remission, CR)，後續仍應進行 <b>造血幹細胞移植 (Stem Cell Transplantation)</b>。</p>
+                <div class="mt-2">
+                    <span class="exam-link">Q5</span>：遺傳性疾病如 <span class="highlight">Fanconi Anemia</span> (范可尼貧血) 會增加骨髓腫瘤的 生殖細胞傾向 (Germline predisposition)。
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: ALL -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-green-800 mb-4 border-b-2 border-green-200">二、急性淋巴性白血病 (Acute Lymphoblastic Leukemia, ALL)</h2>
+            
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">1. 流行病學 (Epidemiology) 與年齡分佈</h3>
+                <p>ALL 是兒童最常見的 新生物疾病 (Neoplastic disease)。發病高峰在 <span class="highlight">3 到 4 歲</span>，之後隨年齡增長下降，但到了老年（大於 65 歲）會再次上升。 <span class="exam-link">Q9</span></p>
+            </div>
+
+            <div class="concept-box bg-green-50 p-4">
+                <h3 class="font-bold text-lg mb-2">2. 免疫分型 (Immunophenotyping)</h3>
+                <p class="text-sm mb-2 text-gray-600 italic">（利用流式細胞儀 Flow cytometry 偵測 CD 標記）</p>
+                <table class="min-w-full bg-white border border-gray-200 mt-2">
+                    <thead>
+                        <tr class="bg-gray-100 font-bold">
+                            <td class="data-cell">譜系 (Lineage)</td>
+                            <td class="data-cell">免疫標記 (CD markers)</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="data-cell font-bold">B 細胞譜系 (B-Cell Lineage)</td>
+                            <td class="data-cell">CD10(+), CD19(+), CD20(+)</td>
+                        </tr>
+                        <tr>
+                            <td class="data-cell font-bold text-red-600">T 細胞譜系 (T-Cell Lineage)</td>
+                            <td class="data-cell">CD7(+), CD3(+)</td>
+                        </tr>
+                        <tr>
+                            <td class="data-cell font-bold">骨髓譜系 (Myeloid Lineage)</td>
+                            <td class="data-cell">CD13, CD33, CD117</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="mt-2">
+                    <span class="exam-link">Q13</span>：錯誤選項將 CD10/CD19 歸類給 T-Cell，這是錯的，它們是 B-Cell 的典型標記。
+                </div>
+            </div>
+
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">3. 中樞神經系統 (CNS) 檢查與預防</h3>
+                <p>ALL 患者必須進行 腦脊髓液 (Cerebrospinal Fluid, CSF) 檢查與 預防性鞘內注射化療 (Prophylactic intrathecal chemotherapy)。</p>
+                <ul class="list-disc ml-6 text-sm">
+                    <li>檢查前須確認 血小板 (Platelet) 數量足夠（大於 20 x 10^9/L）。</li>
+                    <li>第一次腰椎穿刺 (Lumbar puncture) 時即應給予鞘內化療。 <span class="exam-link">Q12</span></li>
+                </ul>
+            </div>
+
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">4. 腫瘤溶解症候群 (TLS) 與 MRD</h3>
+                <p><span class="highlight">腫瘤溶解症候群 (Tumor Lysis Syndrome, TLS)</span>：大量癌細胞崩解釋放內容物，導致：高尿酸 (Hyperuricemia)、高鉀 (Hyperkalemia)、高磷 (Hyperphosphatemia)、<span class="highlight">低鈣 (Hypocalcemia)</span>。 <span class="exam-link">Q10</span></p>
+                <p><span class="highlight">微量殘留疾病 (Minimal Residual Disease, MRD)</span>：指光學顯微鏡 (Light microscopy) 下看不見的殘留。檢測工具包含：流式細胞儀 (Flow cytometry)、聚合酶鏈鎖反應 (PCR) 偵測 免疫球蛋白 (IgH) 或 T 細胞受體 (TCR) 基因重組。 </p>
+                <p class="mt-2 text-sm text-red-600 font-bold italic">注意：顯微鏡下觀察形態 (Morphology)「不適合」用來檢測 MRD，因為其敏感度不足。 <span class="exam-link">Q11</span></p>
+            </div>
+
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">5. ALL 預後與遺傳異常</h3>
+                <ul class="list-disc ml-6">
+                    <li><span class="highlight">良好預後</span>：t(12;21) / ETV6-RUNX1。 <span class="exam-link">Q6, Q16</span></li>
+                    <li><span class="highlight">不良預後 (High-risk)</span>：t(9;22) (BCR-ABL1 / Ph+)、t(4;11)、KMT2A (MLL) 基因重組。 <span class="exam-link">Q16</span></li>
+                    <li>兒童白血病預後因子：年齡、白血球數 (WBC)、細胞遺傳學、分子異常。 <span class="exam-link">Q19</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 3: MDS -->
+        <section>
+            <h2 class="text-2xl font-bold text-purple-800 mb-4 border-b-2 border-purple-200">三、骨髓增生異常症候群 (Myelodysplastic Syndromes, MDS)</h2>
+            
+            <div class="concept-box">
+                <h3 class="font-bold text-lg mb-2">1. 定義與 FAB 分類 (Nosology)</h3>
+                <p>MDS 特徵是：骨髓 <b>無效造血 (Ineffective hematopoiesis)</b> 導致 血球減少 (Cytopenias)，且有高度風險轉化為 AML。</p>
+                <p>1983 FAB 五大亞型：<span class="highlight">RA</span> (頑固性貧血)、<span class="highlight">RARS</span> (帶有環狀鐵母細胞之頑固性貧血)、<span class="highlight">RAEB</span> (芽球過多之頑固性貧血)、RAEB-t、CMML。</p>
+                <div class="mt-2">
+                    <span class="exam-link">Q14</span>：慢性骨髓性白血病 (Chronic Myeloid Leukemia, CML) <u>不屬於</u> MDS 的亞型。
+                </div>
+            </div>
+
+            <div class="concept-box bg-purple-50 p-4">
+                <h3 class="font-bold text-lg mb-2">2. 臨床特徵與預後</h3>
+                <ul class="list-disc ml-6">
+                    <li>MDS 為高齡疾病。主要治療目標是 症狀控制 (Symptom control) 與提升生活品質。</li>
+                    <li><span class="highlight">治療相關性 MDS (Therapy-related MDS)</span>：由先前的化療或放療引起，預後 <b>極差</b>。 <span class="exam-link">Q20</span></li>
+                    <li>多數患者死於 血球減少引起的併發症 (Pancytopenia complications)，而非白血病轉化。</li>
+                </ul>
+            </div>
+
+            <div class="concept-box border-red-500">
+                <h3 class="font-bold text-lg mb-2">3. 治療觀念 (Management)</h3>
+                <ul class="list-disc ml-6">
+                    <li><span class="highlight">低劑量治療</span>：如 Azacitidine、Decitabine (去甲基化藥物 Hypomethylating agents) 用於改善細胞分化。 <span class="exam-link">Q15, Q20</span></li>
+                    <li><span class="highlight">支持療法 (Supportive care)</span>：紅血球或血小板 輸血 (Transfusion) 是臨床上絕對必要的。 <span class="exam-link">Q15 錯誤選項解析</span></li>
+                    <li><span class="highlight">唯一治癒手段 (Curative option)</span>：<span class="highlight text-red-600">造血幹細胞移植 (Hematopoietic Stem Cell Transplantation, HSCT)</span>。 <span class="exam-link">Q20</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="mt-12 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
+            <p>© 2024 血液腫瘤學講義整理 (English-Chinese Integrated Edition) | 祝考試順利！</p>
+        </footer>
     </div>
 </body>
 </html>
